@@ -6,17 +6,16 @@ namespace TaskWork.Models
     {
         public int Id { get; set; }
 
-        [Required, StringLength(100)]
-        public string Title { get; set; }
+        [Required, StringLength(200)]
+        [Display(Name = "Temat")]
+        public string Title { get; set; } = string.Empty;
 
-        public bool IsDone { get; set; } = false;
-
-        [DataType(DataType.Date)]
-        public DateTime? DueDate { get; set; }
-
-        // FK do firmy
+        [Required]
         [Display(Name = "Firma")]
         public int CompanyId { get; set; }
-        public Company Company { get; set; }
+
+        public Company? Company { get; set; }
+
+        public ICollection<TimeEntry> TimeEntries { get; set; } = new List<TimeEntry>();
     }
 }
