@@ -1,0 +1,27 @@
+﻿@page
+@model TaskWork.Pages.CreateModel
+<h2>Dodaj nowe zadanie</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="TaskItem.Title" class="form-label"></label>
+        <input asp-for="TaskItem.Title" class="form-control" />
+        <span asp-validation-for="TaskItem.Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="TaskItem.DueDate" class="form-label"></label>
+        <input asp-for="TaskItem.DueDate" class="form-control" type="date" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="TaskItem.CompanyId" class="form-label"></label>
+        <select asp-for="TaskItem.CompanyId" asp-items="Model.CompanyList" class="form-select"></select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Zapisz</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

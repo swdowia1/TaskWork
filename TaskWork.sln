@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskWork", "TaskWork\TaskWork.csproj", "{F3A4D854-D627-44A9-A9D5-3EA05DBBFBE0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F3A4D854-D627-44A9-A9D5-3EA05DBBFBE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3A4D854-D627-44A9-A9D5-3EA05DBBFBE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3A4D854-D627-44A9-A9D5-3EA05DBBFBE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3A4D854-D627-44A9-A9D5-3EA05DBBFBE0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7B533912-F2FC-4C2E-8E19-FA06494599BA}
+	EndGlobalSection
+EndGlobal
