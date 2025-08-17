@@ -1,10 +1,94 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Zadania i czas";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1 class="mb-3">Zadania i czas</h1>
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Dodaj zadanie</div>
+            <div class="card-body">
+                <form method="post" asp-page-handler="AddTask">
+                    <div class="mb-3">
+                        <label asp-for="NewTask.Title" class="form-label"></label>
+                        <input asp-for="NewTask.Title" class="form-control" />
+                        <span asp-validation-for="NewTask.Title" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="NewTask.CompanyId" class="form-label"></label>
+                        <select asp-for="NewTask.CompanyId" class="form-select" asp-items="Model.CompanySelectList">
+                            <option value="">-- wybierz firmę --</option>
+                        </select>
+                        <span asp-validation-for="NewTask.CompanyId" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Dodaj</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Dodaj czas do zadania</div>
+            <div class="card-body">
+                <form method="post" asp-page-handler="AddTime">
+                    <div class="mb-3">
+                        <label asp-for="TimeForm.TaskItemId" class="form-label"></label>
+                        <select asp-for="TimeForm.TaskItemId" class="form-select" asp-items="Model.TaskSelectList">
+                            <option value="">-- wybierz zadanie --</option>
+                        </select>
+                        <span asp-validation-for="TimeForm.TaskItemId" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="TimeForm.Value" class="form-label"></label>
+                        <input asp-for="TimeForm.Value" class="form-control" />
+                        <span asp-validation-for="TimeForm.Value" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Jednostka</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" asp-for="TimeForm.Unit" value="Minuty" checked />
+                            <label class="form-check-label" for="TimeForm_Unit">Minuty</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" asp-for="TimeForm.Unit" value="Godziny" />
+                            <label class="form-check-label" for="TimeForm_Unit">Godziny</label>
+                        </div>
+                        <span asp-validation-for="TimeForm.Unit" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-success">Zapisz czas</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+<hr />
+<h2 class="mt-4">Lista zadań</h2>
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Temat</th>
+            <th>Firma</th>
+            <th>Łączny czas</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var t in Model.Tasks)
+        {
+            <tr>
+                <td>@t.Id</td>
+                <td>@t.Title</td>
+                <td>@t.CompanyName</td>
+                <td><span class="badge text-bg-secondary">@classFun.FormatMinutes(t.TotalMinutes) h</span></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
