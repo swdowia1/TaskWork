@@ -30,23 +30,25 @@ app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
-// Seed przyk³adowych danych (opcjonalnie)
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    if (!db.Companies.Any())
-    {
-        var f1 = new Company { Name = "EasySender" };
-        var f2 = new Company { Name = "Firma Beta" };
-        db.Companies.AddRange(f1, f2);
-        db.SaveChanges();
+app.MapControllers(); // <<< to dodaj
 
-        db.Tasks.AddRange(
-            new TaskItem { Title = "Raport sprzeda¿y", CompanyId = f1.Id },
-            new TaskItem { Title = "Testy regresyjne", CompanyId = f2.Id }
-        );
-        await db.SaveChangesAsync();
-    }
-}
+//// Seed przyk³adowych danych (opcjonalnie)
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//    if (!db.Companies.Any())
+//    {
+//        var f1 = new Company { Name = "EasySender" };
+//        var f2 = new Company { Name = "Firma Beta" };
+//        db.Companies.AddRange(f1, f2);
+//        db.SaveChanges();
+
+//        db.Tasks.AddRange(
+//            new TaskItem { Title = "Raport sprzeda¿y", CompanyId = f1.Id },
+//            new TaskItem { Title = "Testy regresyjne", CompanyId = f2.Id }
+//        );
+//        await db.SaveChangesAsync();
+//    }
+//}
 
 app.Run();
