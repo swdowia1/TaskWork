@@ -89,14 +89,15 @@
         }
     </tbody>
 </table>
+<div id="jobContainer"></div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
 <script>
-    czekaj('dodawanie danych')
+
     function dodaj() {
-   
+       czekaj('dodawanie danych')
     var model = {
             id: 1,
             pol: 2,
@@ -105,7 +106,19 @@
         console.table(model);
     postjson("/api/baza/update", model, function (data) {
 
-             console.log(data);
+                gethtml('/api/GetHtml/update?id=5',
+        function (html) {
+            // Wstawienie partiala do diva
+            $("#jobContainer").html(html);
+            hideLoader();
+        },
+        function (err) {
+            console.error("Błąd:", err);
+        },
+        function () {
+            console.log("Żądanie zakończone");
+        }
+    );
 
          }, function (data) {
 

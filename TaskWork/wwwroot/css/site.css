@@ -64,7 +64,11 @@ body {
         transform: rotate(360deg);
     }
 }
+/*smieci*/
 
+.job-item {
+    background-color:aqua
+}
 /* Tekst pod spinnerem */
 #loadtextid {
     margin-top: 15px;
