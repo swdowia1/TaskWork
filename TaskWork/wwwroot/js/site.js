@@ -2,6 +2,22 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+window.wait = function (title) {
+    const loadText = document.getElementById("loadtextid");
+    const loading = document.getElementById("loading");
+
+    if (!loading || !loadText) return;
+
+    if (title && title.trim() !== "") {
+        loadText.textContent = title;
+    }
+    loading.style.display = "flex";
+};
+
+window.hideLoader = function () {
+    const loading = document.getElementById("loading");
+    if (loading) loading.style.display = "none";
+};
 postjson = function (n, t, i, r, u) {
 
     return $.ajax({

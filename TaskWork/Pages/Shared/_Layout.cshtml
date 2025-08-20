@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TaskWork.styles.css" asp-append-version="true" />
+ 
 </head>
 <body>
     <header>
@@ -36,7 +37,13 @@
             @RenderBody()
         </main>
     </div>
-
+    <!-- Loader -->
+    <div id="loading">
+        <div class="text-center">
+            <div class="loader"></div>
+            <p id="loadtextid">Proszę czekać...</p>
+        </div>
+    </div>
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - TaskWork - <a asp-area="" asp-page="/Privacy">Privacy</a>
@@ -45,8 +52,11 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js?v=@DateTime.Now.Ticks"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<script>
+    hideLoader();
+</script>

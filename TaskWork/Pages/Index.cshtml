@@ -94,7 +94,9 @@
     <partial name="_ValidationScriptsPartial" />
 }
 <script>
+    czekaj('dodawanie danych')
     function dodaj() {
+   
     var model = {
             id: 1,
             pol: 2,
@@ -103,8 +105,7 @@
         console.table(model);
     postjson("/api/baza/update", model, function (data) {
 
-             alert('udany zapis');
-
+             console.log(data);
 
          }, function (data) {
 
