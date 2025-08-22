@@ -31,6 +31,7 @@ namespace TaskWork.Pages
                 .Select(c => new CompanyTimeSummaryVm
                 {
                     CompanyName = c.Name,
+                    CompanyId = c.Id,
                     Today =classFun.FormatMinutes(c.Tasks
                         .SelectMany(t => t.TimeEntries)
                         .Where(te => te.CreatedAt.Date == today)

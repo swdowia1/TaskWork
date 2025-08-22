@@ -26,9 +26,7 @@
                             </li>
                         </ul>
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary w-100"
-                                data-bs-toggle="modal"
-                                data-bs-target="#addTaskModal-@company.CompanyName.Replace(" ", "")">
+                        <button type="button" onclick="dodaj(@company.CompanyId)" class="btn btn-primary w-100">
                             ➕ Dodaj zadanie
                         </button>
                     </div>
@@ -37,42 +35,56 @@
         }
     </div>
 </div>
-<div id="jobContainer"></div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Dodaj zadanie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="mb-3">
+                    <label class="form-label">Temat</label>
+                    <input type="text" class="form-control" name="Title" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Czas [min] (opcjonalnie)</label>
+                    <input type="number" class="form-control" name="Minutes" min="1" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                <button type="submit" class="btn btn-success" onclick="save()">Zapisz</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-<script>
-
-    function dodaj() {
-       czekaj('dodawanie danych')
-    var model = {
-            id: 1,
-            pol: 2,
-            ang: 3
-        }
-        console.table(model);
-    postjson("/api/baza/update", model, function (data) {
-
-                gethtml('/api/GetHtml/update?id=5',
-        function (html) {
-            // Wstawienie partiala do diva
-            $("#jobContainer").html(html);
-            hideLoader();
-        },
-        function (err) {
-            console.error("Błąd:", err);
-        },
-        function () {
-            console.log("Żądanie zakończone");
-        }
-    );
-
-         }, function (data) {
+<script type="text/javascript">
+  
+    var Commpanyid=0;
+    function dodaj(id) {
+        console.log(Commpanyid);
+          $("#addTaskModal").modal('show');
+          Commpanyid = id;
+           console.log(Commpanyid);
 
 
-
-         })
-    }   
-    
+    }
+    function save()
+    {
+            $("#addTaskModal").modal('hide');
+           alert(Commpanyid);
+    }
 </script>
