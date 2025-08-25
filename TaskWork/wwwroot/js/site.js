@@ -1,7 +1,15 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function textValue(id) {
+    return $("#" + id + "").val()
+}
+function setValue(id, value) {
 
-// Write your JavaScript code.
+    $("#" + id + "").text(value)
+}
+function load() {
+
+window.location.reload();
+
+}
 window.czekaj = function (title) {
     const loadText = document.getElementById("loadtextid");
     const loading = document.getElementById("loading");

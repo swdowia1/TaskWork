@@ -1,0 +1,36 @@
+﻿@page "{companyid:int}/{typ}"
+@model TaskWork.Pages.ZadModel
+
+
+<h2>Zadania dla firmy</h2>
+
+@foreach (var task in Model.lista)
+{
+    <div class="card mb-3">
+        <div class="card-header">
+            <strong>@task.Title</strong>  
+            (Łącznie: @task.TotalMinutes min = @task.TotalHours:F1 h)
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-sm mb-0">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Czas [min]</th>
+                        <th>Czas [h]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var entry in task.TimeEntries)
+                    {
+                        <tr>
+                            <td>@entry.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@entry.Minutes</td>
+                            <td>@(entry.Minutes / 60.0)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

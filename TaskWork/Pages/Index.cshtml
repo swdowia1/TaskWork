@@ -13,16 +13,32 @@
                         <h5 class="card-title">@company.CompanyName</h5>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
-                                <strong>Dzisiaj:</strong> @company.Today
+                                <a asp-page="/Zad"
+                                   asp-route-companyid="@company.CompanyId"
+                                   asp-route-typ="d">
+                                    <strong>Dzisiaj:</strong> @company.Today
+                                </a>
                             </li>
                             <li class="list-group-item">
-                                <strong>Bieżący tydzień:</strong> @company.ThisWeek
+                                <a asp-page="/Zad"
+                                   asp-route-companyid="@company.CompanyId"
+                                   asp-route-typ="w">
+                                    <strong>Bieżący tydzień:</strong> @company.ThisWeek
+                                </a>
                             </li>
                             <li class="list-group-item">
-                                <strong>Bieżący miesiąc:</strong> @company.ThisMonth
+                                <a asp-page="/Zad"
+                                   asp-route-companyid="@company.CompanyId"
+                                   asp-route-typ="m">
+                                    <strong>Bieżący miesiąc:</strong> @company.ThisMonth
+                                </a>
                             </li>
                             <li class="list-group-item">
-                                <strong>Poprzedni miesiąc:</strong> @company.LastMonth
+                                <a asp-page="/Zad"
+                                   asp-route-companyid="@company.CompanyId"
+                                   asp-route-typ="mp">
+                                    <strong>Poprzedni miesiąc:</strong> @company.LastMonth
+                                </a>
                             </li>
                         </ul>
                         <!-- Button trigger modal -->
@@ -51,12 +67,12 @@
 
                 <div class="mb-3">
                     <label class="form-label">Temat</label>
-                    <input type="text" class="form-control" name="Title" required />
+                    <input type="text" class="form-control" id="title" name="Title" required />
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Czas [min] (opcjonalnie)</label>
-                    <input type="number" class="form-control" name="Minutes" min="1" />
+                    <input type="number" class="form-control" id="czas" name="czas" min="1" />
                 </div>
             </div>
             <div class="modal-footer">
@@ -75,16 +91,35 @@
   
     var Commpanyid=0;
     function dodaj(id) {
-        console.log(Commpanyid);
+       
           $("#addTaskModal").modal('show');
           Commpanyid = id;
-           console.log(Commpanyid);
-
-
-    }
+   }
     function save()
     {
-            $("#addTaskModal").modal('hide');
-           alert(Commpanyid);
+             var title = textValue('title');
+                var czas = textValue('czas');
+                 let num = parseInt(czas) || 0;
+           
+         
+             var model = {
+            companyid:Commpanyid ,
+            name: title,
+            ilosc: num
+        }
+
+        console.table(model);
+
+          postjson("/api/baza/addtask", model, function (data) {
+                 $("#addTaskModal").modal('hide');
+          
+           load();
+
+         }, function (data) {
+
+
+             
+
+         })
     }
 </script>

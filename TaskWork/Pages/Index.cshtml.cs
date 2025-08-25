@@ -12,6 +12,7 @@ namespace TaskWork.Pages
     public class IndexModel : PageModel
     {
         private readonly AppDbContext _context;
+
         public List<CompanyTimeSummaryVm> CompaniesSummary { get; set; } = new();
 
         public IndexModel(AppDbContext context)
@@ -20,12 +21,7 @@ namespace TaskWork.Pages
         }
         public async Task OnGetAsync()
         {
-            var now = DateTime.UtcNow;
-            var today = now.Date;
-            var firstDayOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
-            var firstDayOfMonth = new DateTime(today.Year, today.Month, 1);
-            var firstDayOfLastMonth = firstDayOfMonth.AddMonths(-1);
-            var lastDayOfLastMonth = firstDayOfMonth.AddDays(-1);
+            DateRange d=new DateRange();
 
             CompaniesSummary = await _context.Companies
                 .Select(c => new CompanyTimeSummaryVm
@@ -34,22 +30,22 @@ namespace TaskWork.Pages
                     CompanyId = c.Id,
                     Today =classFun.FormatMinutes(c.Tasks
                         .SelectMany(t => t.TimeEntries)
-                        .Where(te => te.CreatedAt.Date == today)
+                        .Where(te => te.CreatedAt>d.Day)
                         .Sum(te => te.Minutes)),
 
                     ThisWeek = classFun.FormatMinutes(c.Tasks
                         .SelectMany(t => t.TimeEntries)
-                        .Where(te => te.CreatedAt.Date >= firstDayOfWeek && te.CreatedAt.Date <= today)
+                        .Where(te => te.CreatedAt>=d.Week)
                         .Sum(te => te.Minutes)),
 
                     ThisMonth = classFun.FormatMinutes(c.Tasks
                         .SelectMany(t => t.TimeEntries)
-                        .Where(te => te.CreatedAt.Date >= firstDayOfMonth && te.CreatedAt.Date <= today)
+                        .Where(te => te.CreatedAt>= d.Month)
                         .Sum(te => te.Minutes)),
 
                     LastMonth = classFun.FormatMinutes(c.Tasks
                         .SelectMany(t => t.TimeEntries)
-                        .Where(te => te.CreatedAt.Date >= firstDayOfLastMonth && te.CreatedAt.Date <= lastDayOfLastMonth)
+                        .Where(te => te.CreatedAt>d.MonthPrev && te.CreatedAt<d.Month)
                         .Sum(te => te.Minutes))
                 })
                 .ToListAsync();
