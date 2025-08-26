@@ -7,9 +7,16 @@
 @foreach (var task in Model.lista)
 {
     <div class="card mb-3">
-        <div class="card-header">
-            <strong>@task.Title</strong>  
-            (Łącznie: @task.TotalMinutes min = @task.TotalHours:F1 h)
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <strong>@task.Title</strong>
+                (Łącznie: @task.TotalMinutes min = @classFun.FormatMinutes(task.TotalMinutes))
+            </div>
+            <button type="button"
+                    class="btn btn-sm btn-primary"
+                    onclick="addtime(@task.TaskId,'@task.Title')">
+                +
+            </button>
         </div>
         <div class="card-body p-0">
             <table class="table table-sm mb-0">
@@ -26,7 +33,7 @@
                         <tr>
                             <td>@entry.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@entry.Minutes</td>
-                            <td>@(entry.Minutes / 60.0)</td>
+                            <td>@classFun.FormatMinutes(entry.Minutes)</td>
                         </tr>
                     }
                 </tbody>
@@ -34,3 +41,68 @@
         </div>
     </div>
 }
+
+<!-- Modal -->
+<div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Dodaj czas dla zadania: <span type="text" id="title" /></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+
+
+                <div class="mb-3">
+                    <label class="form-label">Czas [min]</label>
+                    <input type="number" class="form-control" id="czas" name="czas" min="1" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                <button type="submit" class="btn btn-success" onclick="save()">Zapisz</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+       var TaskId = 0;
+    function addtime(taskId, taskTitle) {
+           TaskId = taskId;
+ $("#addTaskModal").modal('show');
+        console.log(taskId,taskTitle);
+        setValue('title', taskTitle);
+       
+    }
+       function save()
+       {
+                var czas = textValue('czas');
+                 let num = parseInt(czas) || 0;
+
+             if(num <=0)
+             {
+               alert("Podaj czas większy od zera");
+               return;
+             }
+
+                var model = {
+               taskId:TaskId ,
+               ilosc: num
+           }
+           console.table(model);
+              postjson("/api/baza/addtime", model, function (data) {
+                   
+
+              load();
+
+            }, function (data) {
+
+
+
+
+            })
+       }
+</script>

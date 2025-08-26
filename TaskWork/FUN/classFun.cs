@@ -21,7 +21,12 @@
         }
         public static string FormatMinutes(int minutes)
         {
-            return $"{minutes / 60:D2}:{minutes % 60:D2}";
+           
+
+            TimeSpan ts = TimeSpan.FromMinutes(minutes);
+
+            // formatowanie do HH:MM
+           return string.Format("{0:D2}H:{1:D2}", (int)ts.TotalHours, ts.Minutes);
         }
     }
 }

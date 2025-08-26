@@ -49,6 +49,23 @@ namespace TaskWork
 
             return new JsonResult(1);
         }
+
+        //addtime
+        // Czwarta metoda GET zwracająca listę Job
+        [HttpPost("addtime")]
+        public async Task<ActionResult<int>> addtime([FromBody] AddTaskTime dane)
+        {
+
+
+         
+            TimeEntry te = new TimeEntry();
+            te.Minutes = dane.ilosc;
+            te.TaskItemId = dane.taskid;
+            _context.TimeEntries.Add(te);
+            _context.SaveChanges();
+
+            return new JsonResult(1);
+        }
     }
 
 
