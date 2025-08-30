@@ -4,6 +4,6 @@
     {
         public int companyid { get; set; }
         public string name { get; set; }
-        public int ilosc { get; set; }
+        public string ilosc { get; set; }
     }
 }

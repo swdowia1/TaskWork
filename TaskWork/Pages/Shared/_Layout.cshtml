@@ -53,6 +53,24 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js?v=@DateTime.Now.Ticks"></script>
+    <!-- Globalny modal potwierdzenia -->
+    <div class="modal fade" id="globalConfirmModal" tabindex="-1" aria-labelledby="globalConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="globalConfirmModalLabel">Potwierdzenie</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+                </div>
+                <div class="modal-body">
+                    Czy na pewno chcesz wykonać tę akcję?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                    <button type="button" class="btn btn-danger" id="confirmModalOkBtn">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -10,6 +10,26 @@ function load() {
 window.location.reload();
 
 }
+
+function showGlobalConfirmModal(callback, customMessage = null) {
+    confirmCallback = callback;
+
+    if (customMessage) {
+        $('#globalConfirmModal .modal-body').text(customMessage);
+    } else {
+        $('#globalConfirmModal .modal-body').text('Czy na pewno chcesz wykonać tę akcję?');
+    }
+
+    $('#globalConfirmModal').modal('show');
+}
+
+$(document).on('click', '#confirmModalOkBtn', function () {
+
+    if (typeof confirmCallback === 'function') {
+        confirmCallback();
+    }
+    $('#globalConfirmModal').modal('hide');
+});
 window.czekaj = function (title) {
     const loadText = document.getElementById("loadtextid");
     const loading = document.getElementById("loading");

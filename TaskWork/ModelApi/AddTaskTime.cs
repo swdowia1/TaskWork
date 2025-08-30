@@ -4,6 +4,6 @@
     {
         public int taskid { get; set; }
     
-        public int ilosc { get; set; }
+        public string ilosc { get; set; }
     }
 }

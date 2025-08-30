@@ -72,7 +72,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Czas [min] (opcjonalnie)</label>
-                    <input type="number" class="form-control" id="czas" name="czas" min="1" />
+                    <input type="text" class="form-control" id="czas" name="czas" />
                 </div>
             </div>
             <div class="modal-footer">
@@ -98,14 +98,14 @@
     function save()
     {
              var title = textValue('title');
-                var czas = textValue('czas');
-                 let num = parseInt(czas) || 0;
+             var czas = textValue('czas');
+                
            
          
              var model = {
             companyid:Commpanyid ,
             name: title,
-            ilosc: num
+            ilosc: czas
         }
 
         console.table(model);

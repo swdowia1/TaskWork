@@ -12,11 +12,18 @@
                 <strong>@task.Title</strong>
                 (Łącznie: @task.TotalMinutes min = @classFun.FormatMinutes(task.TotalMinutes))
             </div>
-            <button type="button"
-                    class="btn btn-sm btn-primary"
-                    onclick="addtime(@task.TaskId,'@task.Title')">
-                +
-            </button>
+            <span>
+                <button title="usuwanie" type="button"
+                        class="btn btn-sm btn-warning"
+                        onclick="deleteTask(@task.TaskId,'@task.Title')">
+                    -
+                </button>
+                <button type="button"
+                        class="btn btn-sm btn-primary"
+                        onclick="addtime(@task.TaskId,'@task.Title')">
+                    +
+                </button>
+            </span>
         </div>
         <div class="card-body p-0">
             <table class="table table-sm mb-0">
@@ -25,6 +32,7 @@
                         <th>Data</th>
                         <th>Czas [min]</th>
                         <th>Czas [h]</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,6 +42,13 @@
                             <td>@entry.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@entry.Minutes</td>
                             <td>@classFun.FormatMinutes(entry.Minutes)</td>
+                            <td>
+                                <button title="usuwanie czas" type="button"
+                                        class="btn btn-sm btn-warning"
+                                        onclick="deleteTaskTime(@entry.Id)">
+                                    -
+                                </button>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -57,7 +72,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Czas [min]</label>
-                    <input type="number" class="form-control" id="czas" name="czas" min="1" />
+                    <input type="text" class="form-control" id="czas" name="czas" />
                 </div>
             </div>
             <div class="modal-footer">
@@ -69,40 +84,62 @@
     </div>
 </div>
 <script>
-       var TaskId = 0;
-    function addtime(taskId, taskTitle) {
-           TaskId = taskId;
- $("#addTaskModal").modal('show');
-        console.log(taskId,taskTitle);
-        setValue('title', taskTitle);
-       
-    }
-       function save()
-       {
-                var czas = textValue('czas');
-                 let num = parseInt(czas) || 0;
+          var TaskId = 0;
+          function deleteTaskTime(timeid)
+          {
+               showGlobalConfirmModal(
+                () => {
+                    postjson("/api/baza/deleteTasktime", timeid, function (data) {
+            window.location.reload();
+        }, function (data) {
+            console.log(data);
+        });
 
-             if(num <=0)
+                },
+                'Czy usuwamy wybrany czas');
+              
+              //==================
+          }
+             function deleteTask(taskId,tittle)
              {
-               alert("Podaj czas większy od zera");
-               return;
+              showGlobalConfirmModal(
+                () => {
+                    postjson("/api/baza/deleteTask", taskId, function (data) {
+            window.location.reload();
+        }, function (data) {
+            console.log(data);
+        });
+
+                },
+                'Czy usuwamy całe zadanie:'+tittle);
              }
+       function addtime(taskId, taskTitle) {
+              TaskId = taskId;
+    $("#addTaskModal").modal('show');
+           console.log(taskId,taskTitle);
+           setValue('title', taskTitle);
 
-                var model = {
-               taskId:TaskId ,
-               ilosc: num
-           }
-           console.table(model);
-              postjson("/api/baza/addtime", model, function (data) {
-                   
-
-              load();
-
-            }, function (data) {
-
-
-
-
-            })
        }
+          function save()
+          {
+                   var czas = textValue('czas');
+                  
+
+                   var model = {
+                  taskId:TaskId ,
+                  ilosc: czas
+              }
+              console.table(model);
+                 postjson("/api/baza/addtime", model, function (data) {
+
+
+                 load();
+
+               }, function (data) {
+
+
+
+
+               })
+          }
 </script>
