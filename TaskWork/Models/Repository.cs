@@ -41,5 +41,18 @@ namespace TaskWork.Models
 
             return await query.ToListAsync();
         }
+        public async Task<List<T>> GetAllIncludingAsync<T>(
+    params string[] includePaths
+) where T : class
+        {
+            IQueryable<T> query = _db.Set<T>();
+
+            foreach (var path in includePaths)
+            {
+                query = query.Include(path);
+            }
+
+            return await query.ToListAsync();
+        }
     }
 }
