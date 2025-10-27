@@ -20,39 +20,40 @@ namespace TaskWork.Pages
         // Parametry s¹ przekazywane automatycznie z URL
         public async Task OnGetAsync(int companyid, string typ)
         {
-            int CompanyId = companyid;
-            string Typ = typ;
-            DateRange d = new DateRange();
-            DateTime DayTo=classFun.CurrentTimeUTC().AddDays(1);
-            DateTime DayFrom =d.DateFrom(typ);
-            if(typ=="mp")
-                DayTo = d.Month;
+       //     int CompanyId = companyid;
+       //     string Typ = typ;
+       //     DateRange d = new DateRange();
+       //     DateTime DayTo=classFun.CurrentTimeUTC().AddDays(1);
+       //     DateTime DayFrom =d.DateFrom(typ);
+       //     if(typ=="mp")
+       //         DayTo = d.Month;
 
-            var query = await _context.Tasks
-       .Where(t => t.CompanyId == companyid)
-       .Select(t => new TaskSummaryDto
-       {
-           TaskId = t.Id,
-           Title = t.Title,
-           TimeEntries = t.TimeEntries
-               .Where(te => te.CreatedAt >= DayFrom && te.CreatedAt < DayTo)
-               .Select(te => new TimeEntryDto
-               {
-                   Id = te.Id,
-                   Minutes = te.Minutes,
-                   CreatedAt = te.CreatedAt
-               })
-               .ToList(),
-           TotalMinutes = t.TimeEntries
-               .Where(te => te.CreatedAt >= DayFrom && te.CreatedAt < DayTo)
-               .Sum(te => te.Minutes)
-       })
-       .Where(x => x.TotalMinutes > 0) // tylko zadania, które maj¹ wpisy w zakresie
-       .ToListAsync();
+       //     var query = await _context.Tasks
+       //.Where(t => t.CompanyId == companyid)
+       //.Select(t => new TaskSummaryDto
+       //{
+       //    TaskId = t.Id,
+       //    Title = t.Title,
+       //    TimeEntries = t.TimeEntries
+       //        .Where(te => te.CreatedAt >= DayFrom && te.CreatedAt < DayTo)
+       //        .Select(te => new TimeEntryDto
+       //        {
+       //            Id = te.Id,
+       //            Minutes = te.Minutes,
+       //            CreatedAt = te.CreatedAt
+       //        })
+       //        .ToList(),
+       //    TotalMinutes = t.TimeEntries
+       //        .Where(te => te.CreatedAt >= DayFrom && te.CreatedAt < DayTo)
+       //        .Sum(te => te.Minutes)
+       //})
+       //.Where(x => x.TotalMinutes > 0) // tylko zadania, które maj¹ wpisy w zakresie
+       //.ToListAsync();
 
 
-            lista = query;
-        }
+       //     lista = query;
+       //
+       }
    
     }
 }

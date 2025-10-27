@@ -21,34 +21,7 @@ namespace TaskWork.Pages
         }
         public async Task OnGetAsync()
         {
-            DateRange d=new DateRange();
-
-            CompaniesSummary = await _context.Companies
-                .Select(c => new CompanyTimeSummaryVm
-                {
-                    CompanyName = c.Name,
-                    CompanyId = c.Id,
-                    Today =classFun.FormatMinutes(c.Tasks
-                        .SelectMany(t => t.TimeEntries)
-                        .Where(te => te.CreatedAt>d.Day)
-                        .Sum(te => te.Minutes)),
-
-                    ThisWeek = classFun.FormatMinutes(c.Tasks
-                        .SelectMany(t => t.TimeEntries)
-                        .Where(te => te.CreatedAt>=d.Week)
-                        .Sum(te => te.Minutes)),
-
-                    ThisMonth = classFun.FormatMinutes(c.Tasks
-                        .SelectMany(t => t.TimeEntries)
-                        .Where(te => te.CreatedAt>= d.Month)
-                        .Sum(te => te.Minutes)),
-
-                    LastMonth = classFun.FormatMinutes(c.Tasks
-                        .SelectMany(t => t.TimeEntries)
-                        .Where(te => te.CreatedAt>d.MonthPrev && te.CreatedAt<d.Month)
-                        .Sum(te => te.Minutes))
-                })
-                .ToListAsync();
+            
         }
     }
 }
