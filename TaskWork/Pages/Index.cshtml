@@ -7,16 +7,35 @@
 <!-- Pełna szerokość sekcji -->
 <div class="container-fluid py-4 px-5 bg-light">
     <h2 class="mb-4 text-center">📚 Lista artykułów</h2>
-
+    <!-- Filtracja po tagach -->
+    <form method="get" class="mb-4">
+        <label class="form-label me-2">Filtruj po tagach:</label>
+        @foreach (var tag in Model.AllTags)
+        {
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="selectedTags" value="@tag.Name"
+                @(Model.SelectedTags.Contains(tag.Name) ? "checked" : "") />
+                <label class="form-check-label">@tag.Name</label>
+            </div>
+        }
+        <button type="submit" class="btn btn-primary btn-sm ms-2">Filtruj</button>
+    </form>
     @foreach (var article in Model.lista)
     {
         <div class="card shadow-sm border-0 rounded-4 mb-4">
             <div class="card-body">
                 <h5 class="card-title text-primary">@article.Title</h5>
 
-                <div class="markdown-body mt-2">
-                    @Html.Markdown(article.Content)
-                </div>
+                @{
+                    string shortContent; 
+                    int rozmiar=400;
+                    if (!string.IsNullOrEmpty(article.Content)) 
+                    { shortContent = article.Content.Length > rozmiar ? article.Content.Substring(0, article.Content.LastIndexOf(' ', Math.Min(rozmiar, article.Content.Length))) + "..." : article.Content; 
+                    }
+                    else 
+                    { shortContent = ""; 
+                    }
+                } <div class="markdown-body mt-2"> @Html.Markdown(shortContent) </div>
 
                 <div class="mt-3">
                     @foreach (var tag in article.ArticleTags.Select(at => at.Tag))
