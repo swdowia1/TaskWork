@@ -1,0 +1,48 @@
+﻿@page
+@model TaskWork.Pages.CreateModel
+
+@{
+    ViewData["Title"] = "Dodaj artykuł";
+}
+
+<div class="container py-4 px-5">
+    <h2 class="mb-4 text-center text-success">➕ Dodaj nowy artykuł</h2>
+
+    <form method="post">
+        <div class="mb-3">
+            <label asp-for="Article.Title" class="form-label">Tytuł</label>
+            <input asp-for="Article.Title" class="form-control" />
+            <span asp-validation-for="Article.Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Article.Content" class="form-label">Treść (Markdown)</label>
+            <textarea asp-for="Article.Content" class="form-control" rows="10" id="markdownEditor"></textarea>
+            <span asp-validation-for="Article.Content" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tagi</label>
+            <div>
+                @foreach (var tag in Model.AllTags)
+                {
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="SelectedTags" value="@tag.Name" />
+                        <label class="form-check-label">@tag.Name</label>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">💾 Zapisz artykuł</button>
+        <a asp-page="/Index" class="btn btn-secondary ms-2">Anuluj</a>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.css">
+    <script>
+        var simplemde = new SimpleMDE({ element: document.getElementById("markdownEditor") });
+    </script>
+}
