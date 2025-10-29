@@ -9,17 +9,6 @@
     <h2 class="mb-4 text-center text-success">➕ Dodaj nowy artykuł</h2>
 
     <form method="post">
-        <div class="mb-3">
-            <label asp-for="Article.Title" class="form-label">Tytuł</label>
-            <input asp-for="Article.Title" class="form-control" />
-            <span asp-validation-for="Article.Title" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Article.Content" class="form-label">Treść (Markdown)</label>
-            <textarea asp-for="Article.Content" class="form-control" rows="10" id="markdownEditor"></textarea>
-            <span asp-validation-for="Article.Content" class="text-danger"></span>
-        </div>
 
         <div class="mb-3">
             <label class="form-label">Tagi</label>
@@ -33,6 +22,22 @@
                 }
             </div>
         </div>
+        <div class="mb-3">
+            <label class="form-label">Nowe tagi (oddzielone przecinkami)</label>
+            <input type="text" asp-for="NewTags" class="form-control" placeholder="np. C#, ASP.NET, Razor" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Article.Title" class="form-label">Tytuł</label>
+            <input asp-for="Article.Title" class="form-control" />
+            <span asp-validation-for="Article.Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Article.Content" class="form-label">Treść (Markdown)</label>
+            <textarea asp-for="Article.Content" class="form-control" rows="10" id="markdownEditor"></textarea>
+            <span asp-validation-for="Article.Content" class="text-danger"></span>
+        </div>
+
 
         <button type="submit" class="btn btn-primary">💾 Zapisz artykuł</button>
         <a asp-page="/Index" class="btn btn-secondary ms-2">Anuluj</a>
