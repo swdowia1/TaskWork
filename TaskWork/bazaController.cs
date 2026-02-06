@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TaskWork.FUN;
 
 using TaskWork.Models;
+using TaskWork.Serwices;
 
 namespace TaskWork
 {
@@ -12,13 +13,15 @@ namespace TaskWork
     public class bazaController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly TagPredictionService _tagPredictionService;
 
-        public bazaController(AppDbContext context)
+        public bazaController(AppDbContext context, TagPredictionService tagPredictionService)
         {
             _context = context;
+            _tagPredictionService = tagPredictionService;
         }
 
-       
+
 
         //// Czwarta metoda GET zwracająca listę Job
         //[HttpPost("addtask")]
@@ -26,7 +29,7 @@ namespace TaskWork
         //{
 
 
-          
+
         //    return new JsonResult(1);
         //}
         //deleteTasktime
@@ -43,7 +46,14 @@ namespace TaskWork
             
             return new JsonResult(1);
         }
-      
+
+        [HttpPost("predict")]
+        public async Task<ActionResult<List<string>>> predict([FromBody] string content)
+        {
+            var predictedTags = _tagPredictionService.PredictTags(content ?? "");
+            return new JsonResult(predictedTags);
+        }
+
     }
 
 

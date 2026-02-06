@@ -16,6 +16,27 @@ namespace TaskWork.Models
 
         public Task<List<T>> GetAllAsync() => _set.ToListAsync();
         public Task<T?> GetByIdAsync(int id) => _set.FindAsync(id).AsTask();
+        public async Task<T?> GetByIdIncludingAsync(int id, params string[] includeProperties)
+        {
+            IQueryable<T> query = _set;
+
+            foreach (var includeProperty in includeProperties)
+                query = query.Include(includeProperty);
+
+            // zakładamy, że klasa ma właściwość "Id"
+            return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
+        }
+
+        public async Task<T?> GetByIdIncludingAsync(int id, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _set;
+
+            foreach (var include in includes)
+                query = query.Include(include);
+
+            // Zakładamy, że klasa T ma właściwość "Id"
+            return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
+        }
 
         public async Task AddAsync(T entity) => await _set.AddAsync(entity);
         public Task UpdateAsync(T entity) { _set.Update(entity); return Task.CompletedTask; }

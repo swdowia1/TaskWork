@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TaskWork.Models;
+using TaskWork.Serwices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+// 🔹 Rejestracja serwisu ML — singleton (tworzy się tylko raz)
+builder.Services.AddSingleton<TagPredictionService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
@@ -32,7 +34,7 @@ app.MapRazorPages();
 
 app.MapControllers(); // <<< to dodaj
 
-//// Seed przyk�adowych danych (opcjonalnie)
+//// Seed przykładowych danych (opcjonalnie)
 //using (var scope = app.Services.CreateScope())
 //{
 //    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -44,7 +46,7 @@ app.MapControllers(); // <<< to dodaj
 //        db.SaveChanges();
 
 //        db.Tasks.AddRange(
-//            new TaskItem { Title = "Raport sprzeda�y", CompanyId = f1.Id },
+//            new TaskItem { Title = "Raport sprzedaży", CompanyId = f1.Id },
 //            new TaskItem { Title = "Testy regresyjne", CompanyId = f2.Id }
 //        );
 //        await db.SaveChangesAsync();

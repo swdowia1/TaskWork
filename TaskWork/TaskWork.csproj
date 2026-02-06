@@ -20,4 +20,10 @@
     <Folder Include="ModelApi\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\js\simplemde-pl.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

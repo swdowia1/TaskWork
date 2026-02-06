@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TaskWork.Models;
+using TaskWork.Serwices;
 
 namespace TaskWork.Pages
 {
@@ -8,11 +9,15 @@ namespace TaskWork.Pages
     {
         //AppDbContext
         private readonly AppDbContext _context;
+        private readonly TagPredictionService _tagPredictionService;
 
-        public CreateModel(AppDbContext context)
+     
+        public CreateModel(AppDbContext context, TagPredictionService tagPredictionService)
         {
+            _tagPredictionService = tagPredictionService;
             _context = context;
         }
+
         [BindProperty]
         public string NewTags { get; set; }
         [BindProperty]
@@ -25,6 +30,12 @@ namespace TaskWork.Pages
         {
             AllTags = _context.Tags.ToList();
         }
+        // AJAX endpoint do predykcji tagów
+        public IActionResult OnPostPredict([FromBody] string content)
+        {
+            var predictedTags = _tagPredictionService.PredictTags(content ?? "");
+            return new JsonResult(predictedTags);
+        }
         public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
@@ -33,11 +44,11 @@ namespace TaskWork.Pages
                 return Page();
             }
 
-            // 1?? Zapis artyku�u
+            // 1️⃣ Zapis artykułu
             _context.Articles.Add(Article);
             _context.SaveChanges();
 
-            // 2?? Przypisanie wybranych istniej�cych tag�w
+            // 2️⃣ Przypisanie wybranych istniejących tagów
             if (SelectedTags.Any())
             {
                 foreach (var tagName in SelectedTags)
@@ -54,7 +65,7 @@ namespace TaskWork.Pages
                 }
             }
 
-            // 3?? Dodanie nowych tag�w
+            // 3️⃣ Dodanie nowych tagów
             if (!string.IsNullOrWhiteSpace(NewTags))
             {
                 var newTagNames = NewTags.Split(',', StringSplitOptions.RemoveEmptyEntries)
@@ -63,7 +74,7 @@ namespace TaskWork.Pages
 
                 foreach (var tagName in newTagNames)
                 {
-                    // Sprawdzenie czy tag ju� istnieje
+                    // Sprawdzenie czy tag już istnieje
                     var existingTag = _context.Tags.FirstOrDefault(t => t.Name.ToLower() == tagName.ToLower());
                     if (existingTag == null)
                     {

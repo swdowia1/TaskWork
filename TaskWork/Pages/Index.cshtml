@@ -46,10 +46,8 @@
                     }
                 </div>
 
-                <a asp-action="Details" asp-route-id="@article.Id"
-                   class="btn btn-outline-primary btn-sm mt-3">
-                    Czytaj więcej
-                </a>
+                
+                <a asp-page="Details" class="btn btn-outline-primary btn-sm mt-3" asp-route-id="@article.Id">Szczegóły</a>
             </div>
         </div>
     }

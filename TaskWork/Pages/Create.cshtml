@@ -10,44 +10,111 @@
 
     <form method="post">
 
+        <!-- ✅ Tagi -->
         <div class="mb-3">
             <label class="form-label">Tagi</label>
-            <div>
+            <div id="tagsContainer">
+                <!-- <-- dodane id -->
                 @foreach (var tag in Model.AllTags)
                 {
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="SelectedTags" value="@tag.Name" />
+                        <input class="form-check-input" type="checkbox" name="SelectedTags" value='@Html.Raw(tag.Name)' />
                         <label class="form-check-label">@tag.Name</label>
                     </div>
                 }
+
+                <button type="button" onclick="predictTags()" id="predictTagsBtn" class="btn btn-sm btn-info mt-2">
+                    💡 Podpowiedz tagi
+                </button>
             </div>
         </div>
+
+        <!-- ✅ Nowe tagi -->
         <div class="mb-3">
             <label class="form-label">Nowe tagi (oddzielone przecinkami)</label>
             <input type="text" asp-for="NewTags" class="form-control" placeholder="np. C#, ASP.NET, Razor" />
         </div>
+
+        <!-- ✅ Tytuł -->
         <div class="mb-3">
             <label asp-for="Article.Title" class="form-label">Tytuł</label>
             <input asp-for="Article.Title" class="form-control" />
             <span asp-validation-for="Article.Title" class="text-danger"></span>
         </div>
 
+        <!-- ✅ Treść artykułu (Markdown) -->
         <div class="mb-3">
             <label asp-for="Article.Content" class="form-label">Treść (Markdown)</label>
-            <textarea asp-for="Article.Content" class="form-control" rows="10" id="markdownEditor"></textarea>
+            <textarea asp-for="Article.Content" id="markdownEditor" data-simplemde rows="10"></textarea>
             <span asp-validation-for="Article.Content" class="text-danger"></span>
         </div>
 
-
+        <!-- ✅ Przyciski -->
         <button type="submit" class="btn btn-primary">💾 Zapisz artykuł</button>
         <a asp-page="/Index" class="btn btn-secondary ms-2">Anuluj</a>
     </form>
 </div>
 
 @section Scripts {
+    <!-- 🔹 CSS zawsze wczytujemy przed JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.css" />
+
+    <!-- 🔹 Skrypty -->
     <script src="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.css">
     <script>
-        var simplemde = new SimpleMDE({ element: document.getElementById("markdownEditor") });
+        document.addEventListener("DOMContentLoaded", function () {
+            window.simplemde = new SimpleMDE({
+                element: document.getElementById("markdownEditor"),
+                placeholder: "Wpisz tutaj swój tekst w Markdown...",
+                spellChecker: false,
+                status: ["liczba słów", "linia", "tryb"],
+                toolbar: [
+                    { name: "bold", action: SimpleMDE.toggleBold, className: "fa fa-bold", title: "Pogrubienie (Ctrl+B)" },
+                    { name: "italic", action: SimpleMDE.toggleItalic, className: "fa fa-italic", title: "Kursywa (Ctrl+I)" },
+                    { name: "heading", action: SimpleMDE.toggleHeadingSmaller, className: "fa fa-header", title: "Nagłówek" },
+                    "|",
+                    { name: "quote", action: SimpleMDE.toggleBlockquote, className: "fa fa-quote-left", title: "Cytat" },
+                    { name: "unordered-list", action: SimpleMDE.toggleUnorderedList, className: "fa fa-list-ul", title: "Lista punktowana" },
+                    { name: "ordered-list", action: SimpleMDE.toggleOrderedList, className: "fa fa-list-ol", title: "Lista numerowana" },
+                    "|",
+                    { name: "link", action: SimpleMDE.drawLink, className: "fa fa-link", title: "Wstaw link" },
+                    { name: "image", action: SimpleMDE.drawImage, className: "fa fa-picture-o", title: "Wstaw obraz" },
+                    { name: "table", action: SimpleMDE.drawTable, className: "fa fa-table", title: "Wstaw tabelę" },
+                    "|",
+                    { name: "preview", action: SimpleMDE.togglePreview, className: "fa fa-eye", title: "Podgląd" },
+                    { name: "side-by-side", action: SimpleMDE.toggleSideBySide, className: "fa fa-columns", title: "Podgląd obok siebie" },
+                    { name: "fullscreen", action: SimpleMDE.toggleFullScreen, className: "fa fa-arrows-alt", title: "Pełny ekran" },
+                    "|",
+                    { name: "guide", action: "https://simplemde.com/markdown-guide", className: "fa fa-question-circle", title: "Pomoc Markdown" }
+                ]
+            });
+        });
+    </script>
+
+    <script>
+        // ✅ Funkcja do pobierania tagów na podstawie treści
+        function predictTags() {
+            const editorContent = window.simplemde?.value?.() || document.getElementById("markdownEditor").value;
+            console.table(editorContent);
+
+            // Użyj swojej funkcji postjson (lub fetch)
+            postjson("/api/baza/predict", editorContent,
+                function (data) {
+
+                 // Zaznacz checkboxy
+            document.querySelectorAll('#tagsContainer input[type=checkbox]').forEach(cb => {
+                data.forEach(tag => {
+                    // Porównanie ignorujące wielkość liter i dodatkowe spacje
+                    if (cb.value.trim().toLowerCase() === tag.trim().toLowerCase()) {
+                        cb.checked = true;
+                    }
+                });
+            });
+                },
+                function (error) {
+                    console.error("Błąd przy pobieraniu tagów:", error);
+                }
+            );
+        }
     </script>
 }
